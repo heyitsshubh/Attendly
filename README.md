@@ -1,4 +1,4 @@
-# appendly
+# attendly
 
 A new Flutter project.
 
