@@ -39,7 +39,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         final input = file.openRead();
         final fields = await input
             .transform(utf8.decoder)
-            .transform(CsvToListConverter())
+            .transform(CsvDecoder())
             .toList();
 
         // Assuming CSV format: Name, Email, Phone
