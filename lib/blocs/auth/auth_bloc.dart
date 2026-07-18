@@ -14,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         super(AuthInitial()) {
     on<AuthUserChanged>(_onAuthUserChanged);
     on<AuthLoginRequested>(_onAuthLoginRequested);
+    on<AuthRegisterRequested>(_onAuthRegisterRequested);
     on<AuthLogoutRequested>(_onAuthLogoutRequested);
 
     _userSubscription = _authService.user.listen((user) {
@@ -40,6 +41,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } catch (e) {
       emit(AuthError(e.toString()));
       emit(Unauthenticated()); // Reset to unauthenticated after showing error
+    }
+  }
+
+  Future<void> _onAuthRegisterRequested(
+      AuthRegisterRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      await _authService.createUserWithEmailAndPassword(
+        event.email,
+        event.password,
+      );
+    } catch (e) {
+      emit(AuthError(e.toString()));
+      emit(Unauthenticated());
     }
   }
 
