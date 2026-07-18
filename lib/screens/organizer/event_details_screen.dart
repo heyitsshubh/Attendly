@@ -29,7 +29,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   Future<void> _importCSV() async {
     try {
-      FilePickerResult? result = await FilePicker.pickFiles(
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['csv'],
       );
