@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'blocs/auth/auth_bloc.dart';
 import 'blocs/auth/auth_state.dart';
+import 'blocs/event/event_bloc.dart';
 import 'services/auth_service.dart';
+import 'services/event_service.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/organizer/dashboard_screen.dart';
 import 'firebase_options.dart';
@@ -82,12 +84,20 @@ class AttendlyApp extends StatelessWidget {
         RepositoryProvider<AuthService>(
           create: (context) => AuthService(),
         ),
+        RepositoryProvider<EventService>(
+          create: (context) => EventService(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               authService: context.read<AuthService>(),
+            ),
+          ),
+          BlocProvider<EventBloc>(
+            create: (context) => EventBloc(
+              eventService: context.read<EventService>(),
             ),
           ),
         ],
