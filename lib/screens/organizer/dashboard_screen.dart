@@ -7,6 +7,7 @@ import '../../blocs/event/event_bloc.dart';
 import '../../blocs/event/event_event.dart';
 import '../../blocs/event/event_state.dart';
 import 'create_event_screen.dart';
+import 'event_details_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -59,7 +60,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     isThreeLine: true,
                     trailing: const Icon(Icons.arrow_forward_ios),
                     onTap: () {
-                      // Navigate to Event Details (Feature 4)
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EventDetailsScreen(event: event),
+                        ),
+                      );
                     },
                   ),
                 );
