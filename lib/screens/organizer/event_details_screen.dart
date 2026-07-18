@@ -29,7 +29,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
 
   Future<void> _importCSV() async {
     try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      FilePickerResult? result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['csv'],
       );
@@ -39,7 +39,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
         final input = file.openRead();
         final fields = await input
             .transform(utf8.decoder)
-            .transform(const CsvToListConverter())
+            .transform(CsvToListConverter())
             .toList();
 
         // Assuming CSV format: Name, Email, Phone
