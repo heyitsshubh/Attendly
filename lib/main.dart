@@ -7,6 +7,7 @@ import 'blocs/auth/auth_state.dart';
 import 'services/auth_service.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/organizer/dashboard_screen.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,7 +16,9 @@ void main() async {
 
   try {
     // Note: This requires flutterfire configure to be run by the user.
-    await Firebase.initializeApp();
+ await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+);
     isFirebaseInitialized = true;
   } catch (e) {
     isFirebaseInitialized = false;
