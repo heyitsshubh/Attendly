@@ -38,7 +38,9 @@ class AttendeeModel extends Equatable {
       ticketId: data['ticketId'] ?? '',
       registeredAt: (data['registeredAt'] as Timestamp).toDate(),
       checkedIn: data['checkedIn'] ?? false,
-      checkedInAt: data['checkedInAt'] != null ? (data['checkedInAt'] as Timestamp).toDate() : null,
+      checkedInAt: data['checkedInAt'] != null
+          ? (data['checkedInAt'] as Timestamp).toDate()
+          : null,
       checkedInBy: data['checkedInBy'],
       gateId: data['gateId'],
     );
@@ -52,7 +54,8 @@ class AttendeeModel extends Equatable {
       'ticketId': ticketId,
       'registeredAt': Timestamp.fromDate(registeredAt),
       'checkedIn': checkedIn,
-      'checkedInAt': checkedInAt != null ? Timestamp.fromDate(checkedInAt!) : null,
+      'checkedInAt':
+          checkedInAt != null ? Timestamp.fromDate(checkedInAt!) : null,
       'checkedInBy': checkedInBy,
       'gateId': gateId,
     };
