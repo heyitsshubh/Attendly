@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'blocs/auth/auth_bloc.dart';
 import 'blocs/auth/auth_state.dart';
 import 'blocs/event/event_bloc.dart';
+import 'blocs/attendee/attendee_bloc.dart';
 import 'services/auth_service.dart';
 import 'services/event_service.dart';
+import 'services/attendee_service.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/organizer/dashboard_screen.dart';
 import 'firebase_options.dart';
@@ -87,6 +89,9 @@ class AttendlyApp extends StatelessWidget {
         RepositoryProvider<EventService>(
           create: (context) => EventService(),
         ),
+        RepositoryProvider<AttendeeService>(
+          create: (context) => AttendeeService(),
+        ),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -98,6 +103,11 @@ class AttendlyApp extends StatelessWidget {
           BlocProvider<EventBloc>(
             create: (context) => EventBloc(
               eventService: context.read<EventService>(),
+            ),
+          ),
+          BlocProvider<AttendeeBloc>(
+            create: (context) => AttendeeBloc(
+              attendeeService: context.read<AttendeeService>(),
             ),
           ),
         ],
