@@ -11,6 +11,7 @@ import '../../blocs/attendee/attendee_bloc.dart';
 import '../../blocs/attendee/attendee_event.dart';
 import '../../blocs/attendee/attendee_state.dart';
 import '../attendee/ticket_screen.dart';
+import 'scanner_screen.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   final EventModel event;
@@ -212,10 +213,31 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           return const Center(child: Text('Initializing...'));
         },
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _showAddAttendeeDialog,
-        icon: const Icon(Icons.person_add),
-        label: const Text('Add Attendee'),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'scan',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ScannerScreen(event: widget.event),
+                ),
+              );
+            },
+            tooltip: 'Scan Tickets',
+            child: const Icon(Icons.qr_code_scanner),
+          ),
+          const SizedBox(height: 12),
+          FloatingActionButton.extended(
+            heroTag: 'add',
+            onPressed: _showAddAttendeeDialog,
+            icon: const Icon(Icons.person_add),
+            label: const Text('Add Attendee'),
+          ),
+        ],
       ),
     );
   }
