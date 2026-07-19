@@ -36,7 +36,7 @@ class _TicketSearchScreenState extends State<TicketSearchScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(colors: [
-                  AppTheme.accentViolet.withOpacity(0.2),
+                  AppTheme.primaryRed.withOpacity(0.2),
                   Colors.transparent,
                 ]),
               ),
@@ -51,7 +51,7 @@ class _TicketSearchScreenState extends State<TicketSearchScreen> {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 gradient: RadialGradient(colors: [
-                  AppTheme.primaryIndigo.withOpacity(0.15),
+                  AppTheme.primaryRedDeep.withOpacity(0.15),
                   Colors.transparent,
                 ]),
               ),
@@ -94,7 +94,7 @@ class _TicketSearchScreenState extends State<TicketSearchScreen> {
                                   borderRadius: BorderRadius.circular(24),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: AppTheme.primaryIndigo.withOpacity(0.4),
+                                      color: AppTheme.primaryRed.withOpacity(0.4),
                                       blurRadius: 24,
                                       offset: const Offset(0, 8),
                                     ),
@@ -198,7 +198,7 @@ class _GradientButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.primaryIndigo.withOpacity(0.4),
+              color: AppTheme.primaryRed.withOpacity(0.4),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),

@@ -356,7 +356,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               MaterialPageRoute(
                   builder: (_) => ScannerScreen(event: widget.event)),
             ),
-            backgroundColor: AppTheme.accentViolet,
+            backgroundColor: AppTheme.primaryRedDeep,
             foregroundColor: Colors.white,
             tooltip: 'Scan Tickets',
             child: const Icon(Icons.qr_code_scanner_rounded),
@@ -365,7 +365,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           FloatingActionButton.extended(
             heroTag: 'add',
             onPressed: _showAddAttendeeDialog,
-            backgroundColor: AppTheme.primaryIndigo,
+            backgroundColor: AppTheme.primaryRed,
             foregroundColor: Colors.white,
             icon: const Icon(Icons.person_add_rounded),
             label: const Text('Add Attendee'),
@@ -470,7 +470,7 @@ class _AttendeeCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 const Icon(Icons.qr_code_rounded,
-                    size: 16, color: AppTheme.primaryIndigo),
+                    size: 16, color: AppTheme.primaryRed),
               ],
             ),
           ],

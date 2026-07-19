@@ -189,7 +189,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         ),
         icon: const Icon(Icons.add_rounded),
         label: const Text('New Event'),
-        backgroundColor: AppTheme.primaryIndigo,
+        backgroundColor: AppTheme.primaryRed,
         foregroundColor: Colors.white,
         elevation: 6,
       ),
@@ -312,7 +312,7 @@ class _EventCard extends StatelessWidget {
             const Padding(
               padding: EdgeInsets.only(right: 12),
               child: Icon(Icons.chevron_right_rounded,
-                  color: AppTheme.primaryIndigo),
+                  color: AppTheme.primaryRed),
             ),
           ],
         ),
@@ -340,20 +340,20 @@ class _Chip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: AppTheme.primaryIndigo.withOpacity(0.08),
+        color: AppTheme.primaryRed.withOpacity(0.08),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 12, color: AppTheme.primaryIndigo),
+          Icon(icon, size: 12, color: AppTheme.primaryRed),
           const SizedBox(width: 4),
           Text(
             label,
             style: GoogleFonts.outfit(
               fontSize: 11,
               fontWeight: FontWeight.w600,
-              color: AppTheme.primaryIndigo,
+              color: AppTheme.primaryRed,
             ),
           ),
         ],
@@ -383,7 +383,7 @@ class _EmptyState extends StatelessWidget {
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: AppTheme.primaryIndigo.withOpacity(0.3),
+                    color: AppTheme.primaryRed.withOpacity(0.3),
                     blurRadius: 24,
                     offset: const Offset(0, 8),
                   )
@@ -433,7 +433,7 @@ class _GradientButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.primaryIndigo.withOpacity(0.4),
+              color: AppTheme.primaryRed.withOpacity(0.4),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),

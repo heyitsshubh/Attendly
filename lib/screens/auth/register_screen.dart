@@ -57,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(colors: [
-                    AppTheme.accentViolet.withOpacity(0.22),
+                    AppTheme.primaryRed.withOpacity(0.22),
                     Colors.transparent,
                   ]),
                 ),
@@ -72,7 +72,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   gradient: RadialGradient(colors: [
-                    AppTheme.primaryIndigo.withOpacity(0.18),
+                    AppTheme.primaryRedDeep.withOpacity(0.18),
                     Colors.transparent,
                   ]),
                 ),
@@ -105,26 +105,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         const SizedBox(height: 12),
 
                         // Logo
-                        Container(
-                          width: 72,
-                          height: 72,
-                          decoration: BoxDecoration(
-                            gradient: AppTheme.primaryGradient,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppTheme.primaryIndigo.withOpacity(0.4),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.event_available_rounded,
-                            color: Colors.white,
-                            size: 36,
-                          ),
-                        ),
+                        const _AttendlyLogo(size: 72),
                         const SizedBox(height: 24),
 
                         Text(
@@ -290,7 +271,7 @@ class _GradientButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.primaryIndigo.withOpacity(0.4),
+              color: AppTheme.primaryRed.withOpacity(0.4),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
@@ -308,5 +289,95 @@ class _GradientButton extends StatelessWidget {
         ),
       ),
     );
+    );
   }
 }
+
+/// Attendly branded logo widget
+class _AttendlyLogo extends StatelessWidget {
+  final double size;
+  const _AttendlyLogo({required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: AppTheme.darkBg,
+        borderRadius: BorderRadius.circular(size * 0.25),
+        boxShadow: [
+          BoxShadow(
+            color: AppTheme.primaryRed.withOpacity(0.45),
+            blurRadius: 24,
+            offset: const Offset(0, 8),
+          ),
+        ],
+        border: Border.all(color: AppTheme.primaryRed.withOpacity(0.4), width: 1.5),
+      ),
+      child: Stack(
+        alignment: Alignment.center,
+        children: [
+          // Scanner corner brackets
+          Positioned(
+            top: size * 0.14,
+            left: size * 0.14,
+            child: _ScanCorner(size: size * 0.22),
+          ),
+          Positioned(
+            top: size * 0.14,
+            right: size * 0.14,
+            child: Transform(transform: Matrix4.rotationY(3.14), alignment: Alignment.center, child: _ScanCorner(size: size * 0.22)),
+          ),
+          Positioned(
+            bottom: size * 0.14,
+            left: size * 0.14,
+            child: Transform(transform: Matrix4.rotationX(3.14), alignment: Alignment.center, child: _ScanCorner(size: size * 0.22)),
+          ),
+          Positioned(
+            bottom: size * 0.14,
+            right: size * 0.14,
+            child: Transform(
+              transform: Matrix4.rotationZ(3.14),
+              alignment: Alignment.center,
+              child: _ScanCorner(size: size * 0.22),
+            ),
+          ),
+          // Center icon
+          Icon(Icons.qr_code_rounded, color: AppTheme.primaryRed, size: size * 0.38),
+        ],
+      ),
+    );
+  }
+}
+
+class _ScanCorner extends StatelessWidget {
+  final double size;
+  const _ScanCorner({required this.size});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: CustomPaint(painter: _CornerPainter()),
+    );
+  }
+}
+
+class _CornerPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = AppTheme.primaryRed
+      ..strokeWidth = 2.5
+      ..strokeCap = StrokeCap.round
+      ..style = PaintingStyle.stroke;
+    canvas.drawLine(Offset.zero, Offset(size.width, 0), paint);
+    canvas.drawLine(Offset.zero, Offset(0, size.height), paint);
+  }
+
+  @override
+  bool shouldRepaint(_) => false;
+}
+
