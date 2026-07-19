@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
+import '../attendee/ticket_search_screen.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -99,6 +100,24 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     },
                     child: const Text("Don't have an account? Register here"),
+                  ),
+                  const SizedBox(height: 24),
+                  const Divider(),
+                  const SizedBox(height: 24),
+                  OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TicketSearchScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.qr_code),
+                    label: const Text('I am an Attendee - Find My Ticket'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
                   ),
                 ],
               ),

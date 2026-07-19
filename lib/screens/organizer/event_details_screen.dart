@@ -10,6 +10,7 @@ import '../../models/attendee.dart';
 import '../../blocs/attendee/attendee_bloc.dart';
 import '../../blocs/attendee/attendee_event.dart';
 import '../../blocs/attendee/attendee_state.dart';
+import '../attendee/ticket_screen.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   final EventModel event;
@@ -196,6 +197,14 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                     attendee.ticketId.substring(0, 8),
                     style: const TextStyle(fontFamily: 'monospace', fontSize: 12),
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TicketScreen(ticketId: attendee.ticketId),
+                      ),
+                    );
+                  },
                 );
               },
             );
