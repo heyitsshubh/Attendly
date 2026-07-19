@@ -6,6 +6,7 @@ import '../../blocs/event/event_event.dart';
 import '../../blocs/event/event_state.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
+import '../../blocs/auth/auth_state.dart';
 import '../../models/event.dart';
 import '../../theme/app_theme.dart';
 import 'create_event_screen.dart';
@@ -22,7 +23,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<EventBloc>().add(LoadEventsRequested());
+    final authState = context.read<AuthBloc>().state;
+    if (authState is Authenticated) {
+      context.read<EventBloc>().add(LoadEventsRequested(authState.user.uid));
+    }
   }
 
   @override
