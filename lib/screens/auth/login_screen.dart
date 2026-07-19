@@ -354,7 +354,7 @@ class _GradientButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: AppTheme.primaryIndigo.withOpacity(0.4),
+              color: AppTheme.primaryRed.withOpacity(0.4),
               blurRadius: 16,
               offset: const Offset(0, 6),
             ),
