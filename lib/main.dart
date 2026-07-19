@@ -18,6 +18,7 @@ import 'services/sync_service.dart';
 import 'screens/auth/login_screen.dart';
 import 'screens/organizer/dashboard_screen.dart';
 import 'firebase_options.dart';
+import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -140,20 +141,9 @@ class AttendlyApp extends StatelessWidget {
         ],
         child: MaterialApp(
           title: 'Attendly',
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple,
-              brightness: Brightness.light,
-            ),
-            useMaterial3: true,
-          ),
-          darkTheme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Colors.deepPurple,
-              brightness: Brightness.dark,
-            ),
-            useMaterial3: true,
-          ),
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          darkTheme: AppTheme.dark,
           themeMode: ThemeMode.system,
           home: const AuthWrapper(),
         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../../theme/app_theme.dart';
 import 'ticket_screen.dart';
 
 class TicketSearchScreen extends StatefulWidget {
@@ -19,56 +21,203 @@ class _TicketSearchScreenState extends State<TicketSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Find My Ticket'),
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
+      body: Stack(
+        children: [
+          // Top gradient blob
+          Positioned(
+            top: -100,
+            left: -80,
+            child: Container(
+              width: 300,
+              height: 300,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(colors: [
+                  AppTheme.accentViolet.withOpacity(0.2),
+                  Colors.transparent,
+                ]),
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: -80,
+            right: -60,
+            child: Container(
+              width: 250,
+              height: 250,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                gradient: RadialGradient(colors: [
+                  AppTheme.primaryIndigo.withOpacity(0.15),
+                  Colors.transparent,
+                ]),
+              ),
+            ),
+          ),
+
+          SafeArea(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                const Icon(Icons.qr_code_scanner, size: 64, color: Colors.deepPurple),
-                const SizedBox(height: 24),
-                const Text(
-                  'Enter your Ticket ID below to access your scannable QR ticket.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16),
-                ),
-                const SizedBox(height: 32),
-                TextField(
-                  controller: _ticketIdController,
-                  decoration: const InputDecoration(
-                    labelText: 'Ticket ID',
-                    border: OutlineInputBorder(),
-                    prefixIcon: Icon(Icons.confirmation_number),
+                // AppBar row
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_back_rounded),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: () {
-                    final ticketId = _ticketIdController.text.trim();
-                    if (ticketId.isNotEmpty) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TicketScreen(ticketId: ticketId),
+
+                Expanded(
+                  child: Center(
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.symmetric(horizontal: 28),
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 420),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            // Animated icon
+                            Center(
+                              child: Container(
+                                width: 90,
+                                height: 90,
+                                decoration: BoxDecoration(
+                                  gradient: AppTheme.primaryGradient,
+                                  borderRadius: BorderRadius.circular(24),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: AppTheme.primaryIndigo.withOpacity(0.4),
+                                      blurRadius: 24,
+                                      offset: const Offset(0, 8),
+                                    ),
+                                  ],
+                                ),
+                                child: const Icon(
+                                  Icons.confirmation_number_rounded,
+                                  color: Colors.white,
+                                  size: 44,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 28),
+
+                            Text(
+                              'Find Your Ticket',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium
+                                  ?.copyWith(fontWeight: FontWeight.w800),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'Enter the Ticket ID you received\nafter registering for the event.',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: isDark
+                                        ? AppTheme.darkSubtext
+                                        : AppTheme.lightSubtext,
+                                  ),
+                            ),
+                            const SizedBox(height: 40),
+
+                            TextField(
+                              controller: _ticketIdController,
+                              textCapitalization: TextCapitalization.none,
+                              style: GoogleFonts.sourceCodePro(fontSize: 14),
+                              decoration: InputDecoration(
+                                labelText: 'Ticket ID (UUID)',
+                                prefixIcon: const Icon(Icons.qr_code_rounded),
+                                hintText: 'e.g. 3f7a1c2d-...',
+                                hintStyle: GoogleFonts.sourceCodePro(
+                                    fontSize: 12,
+                                    color: isDark
+                                        ? AppTheme.darkSubtext
+                                        : AppTheme.lightSubtext),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+
+                            _GradientButton(
+                              label: 'View My Ticket',
+                              icon: Icons.arrow_forward_rounded,
+                              onPressed: () {
+                                final id = _ticketIdController.text.trim();
+                                if (id.isNotEmpty) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => TicketScreen(ticketId: id),
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ],
                         ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
+                    ),
                   ),
-                  child: const Text('View Ticket', style: TextStyle(fontSize: 16)),
                 ),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _GradientButton extends StatelessWidget {
+  final String label;
+  final IconData icon;
+  final VoidCallback onPressed;
+
+  const _GradientButton({
+    required this.label,
+    required this.icon,
+    required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 52,
+        decoration: BoxDecoration(
+          gradient: AppTheme.primaryGradient,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.primaryIndigo.withOpacity(0.4),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.outfit(
+                fontSize: 15,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
+            ),
+            const SizedBox(width: 8),
+            Icon(icon, color: Colors.white, size: 18),
+          ],
         ),
       ),
     );

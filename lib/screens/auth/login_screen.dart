@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
+import '../../theme/app_theme.dart';
 import '../attendee/ticket_search_screen.dart';
 import 'register_screen.dart';
 
@@ -16,6 +18,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -26,6 +29,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
@@ -35,92 +40,264 @@ class _LoginScreenState extends State<LoginScreen> {
             );
           }
         },
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 400),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const Text(
-                    'Attendly',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+        child: Stack(
+          children: [
+            // ── Background gradient blobs ────────────────────────────────────
+            Positioned(
+              top: -80,
+              right: -60,
+              child: Container(
+                width: 260,
+                height: 260,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      AppTheme.primaryIndigo.withOpacity(0.25),
+                      Colors.transparent,
+                    ],
                   ),
-                  const SizedBox(height: 48),
-                  TextField(
-                    controller: _emailController,
-                    decoration: const InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -60,
+              left: -40,
+              child: Container(
+                width: 220,
+                height: 220,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: RadialGradient(
+                    colors: [
+                      AppTheme.accentViolet.withOpacity(0.2),
+                      Colors.transparent,
+                    ],
                   ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                    ),
-                    obscureText: true,
-                  ),
-                  const SizedBox(height: 24),
-                  BlocBuilder<AuthBloc, AuthState>(
-                    builder: (context, state) {
-                      if (state is AuthLoading) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                      return ElevatedButton(
-                        onPressed: () {
-                          context.read<AuthBloc>().add(
-                                AuthLoginRequested(
-                                  _emailController.text,
-                                  _passwordController.text,
+                ),
+              ),
+            ),
+
+            // ── Content ──────────────────────────────────────────────────────
+            SafeArea(
+              child: Center(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 24),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 400),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        // Logo
+                        Container(
+                          width: 72,
+                          height: 72,
+                          decoration: BoxDecoration(
+                            gradient: AppTheme.primaryGradient,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppTheme.primaryIndigo.withOpacity(0.4),
+                                blurRadius: 20,
+                                offset: const Offset(0, 8),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.event_available_rounded,
+                            color: Colors.white,
+                            size: 36,
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+                        Text(
+                          'Welcome back',
+                          style: Theme.of(context)
+                              .textTheme
+                              .displayMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w800,
+                              ),
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'Sign in to manage your events',
+                          style:
+                              Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                    color: isDark
+                                        ? AppTheme.darkSubtext
+                                        : AppTheme.lightSubtext,
+                                  ),
+                        ),
+                        const SizedBox(height: 40),
+
+                        // Email field
+                        TextField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            labelText: 'Email address',
+                            prefixIcon: const Icon(Icons.email_outlined),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+
+                        // Password field
+                        TextField(
+                          controller: _passwordController,
+                          obscureText: _obscurePassword,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            prefixIcon: const Icon(Icons.lock_outline_rounded),
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
+                              ),
+                              onPressed: () => setState(
+                                  () => _obscurePassword = !_obscurePassword),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 28),
+
+                        // Login button
+                        BlocBuilder<AuthBloc, AuthState>(
+                          builder: (context, state) {
+                            if (state is AuthLoading) {
+                              return Container(
+                                height: 52,
+                                decoration: BoxDecoration(
+                                  gradient: AppTheme.primaryGradient,
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                                child: const Center(
+                                  child: SizedBox(
+                                    width: 22,
+                                    height: 22,
+                                    child: CircularProgressIndicator(
+                                        strokeWidth: 2.5,
+                                        color: Colors.white),
+                                  ),
                                 ),
                               );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                            }
+                            return _GradientButton(
+                              label: 'Sign in',
+                              onPressed: () {
+                                context.read<AuthBloc>().add(
+                                      AuthLoginRequested(
+                                        _emailController.text.trim(),
+                                        _passwordController.text,
+                                      ),
+                                    );
+                              },
+                            );
+                          },
                         ),
-                        child: const Text('Login', style: TextStyle(fontSize: 16)),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const RegisterScreen(),
+
+                        const SizedBox(height: 20),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Don't have an account? ",
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                            TextButton(
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  minimumSize: Size.zero,
+                                  tapTargetSize:
+                                      MaterialTapTargetSize.shrinkWrap),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const RegisterScreen()),
+                              ),
+                              child: const Text('Register'),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    child: const Text("Don't have an account? Register here"),
-                  ),
-                  const SizedBox(height: 24),
-                  const Divider(),
-                  const SizedBox(height: 24),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const TicketSearchScreen(),
+
+                        const SizedBox(height: 32),
+                        Row(
+                          children: [
+                            const Expanded(child: Divider()),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Text('or',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                          color: isDark
+                                              ? AppTheme.darkSubtext
+                                              : AppTheme.lightSubtext)),
+                            ),
+                            const Expanded(child: Divider()),
+                          ],
                         ),
-                      );
-                    },
-                    icon: const Icon(Icons.qr_code),
-                    label: const Text('I am an Attendee - Find My Ticket'),
-                    style: OutlinedButton.styleFrom(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                        const SizedBox(height: 32),
+
+                        // Attendee button
+                        OutlinedButton.icon(
+                          onPressed: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const TicketSearchScreen()),
+                          ),
+                          icon: const Icon(Icons.qr_code_rounded),
+                          label: const Text('I have a ticket'),
+                        ),
+                        const SizedBox(height: 32),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// Reusable gradient button widget
+class _GradientButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+
+  const _GradientButton({required this.label, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        height: 52,
+        decoration: BoxDecoration(
+          gradient: AppTheme.primaryGradient,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: AppTheme.primaryIndigo.withOpacity(0.4),
+              blurRadius: 16,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: GoogleFonts.outfit(
+              fontSize: 15,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
             ),
           ),
         ),
