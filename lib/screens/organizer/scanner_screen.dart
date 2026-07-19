@@ -5,6 +5,7 @@ import '../../blocs/scanner/scanner_bloc.dart';
 import '../../blocs/scanner/scanner_event.dart';
 import '../../blocs/scanner/scanner_state.dart';
 import '../../blocs/sync/sync_bloc.dart';
+import '../../blocs/sync/sync_event.dart';
 import '../../blocs/sync/sync_state.dart';
 import '../../models/event.dart';
 

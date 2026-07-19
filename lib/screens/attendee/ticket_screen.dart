@@ -63,7 +63,7 @@ class _TicketScreenState extends State<TicketScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '${event.location} • ${event.date.toLocal().toString().split(' ')[0]}',
+                    '${event.location} • ${event.startTime.toLocal().toString().split(' ')[0]}',
                       style: const TextStyle(
                         fontSize: 16,
                         color: Colors.grey,
