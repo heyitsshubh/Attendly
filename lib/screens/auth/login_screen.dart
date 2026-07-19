@@ -270,71 +270,18 @@ class _AttendlyLogo extends StatelessWidget {
         ],
         border: Border.all(color: AppTheme.primaryRed.withOpacity(0.4), width: 1.5),
       ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          // Scanner corner brackets
-          Positioned(
-            top: size * 0.14,
-            left: size * 0.14,
-            child: _ScanCorner(size: size * 0.22),
-          ),
-          Positioned(
-            top: size * 0.14,
-            right: size * 0.14,
-            child: Transform(transform: Matrix4.rotationY(3.14), alignment: Alignment.center, child: _ScanCorner(size: size * 0.22)),
-          ),
-          Positioned(
-            bottom: size * 0.14,
-            left: size * 0.14,
-            child: Transform(transform: Matrix4.rotationX(3.14), alignment: Alignment.center, child: _ScanCorner(size: size * 0.22)),
-          ),
-          Positioned(
-            bottom: size * 0.14,
-            right: size * 0.14,
-            child: Transform(
-              transform: Matrix4.rotationZ(3.14),
-              alignment: Alignment.center,
-              child: _ScanCorner(size: size * 0.22),
-            ),
-          ),
-          // Center icon
-          Icon(Icons.qr_code_rounded, color: AppTheme.primaryRed, size: size * 0.38),
-        ],
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(size * 0.25 - 1.5),
+        child: Image.asset(
+          'assets/logo.png',
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
 }
 
-class _ScanCorner extends StatelessWidget {
-  final double size;
-  const _ScanCorner({required this.size});
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: CustomPaint(painter: _CornerPainter()),
-    );
-  }
-}
-
-class _CornerPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppTheme.primaryRed
-      ..strokeWidth = 2.5
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke;
-    canvas.drawLine(Offset.zero, Offset(size.width, 0), paint);
-    canvas.drawLine(Offset.zero, Offset(0, size.height), paint);
-  }
-
-  @override
-  bool shouldRepaint(_) => false;
-}
 
 /// Reusable gradient button widget
 class _GradientButton extends StatelessWidget {
