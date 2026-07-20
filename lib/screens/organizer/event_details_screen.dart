@@ -14,6 +14,7 @@ import '../../blocs/attendee/attendee_state.dart';
 import '../../theme/app_theme.dart';
 import '../attendee/ticket_screen.dart';
 import 'scanner_screen.dart';
+import 'analytics_screen.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   final EventModel event;
@@ -253,6 +254,21 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
               titlePadding: const EdgeInsets.only(left: 56, bottom: 12),
             ),
             actions: [
+              IconButton(
+                icon: const Icon(Icons.bar_chart_rounded),
+                tooltip: 'Analytics & Export',
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<AttendeeBloc>(),
+                        child: AnalyticsScreen(event: widget.event),
+                      ),
+                    ),
+                  );
+                },
+              ),
               IconButton(
                 icon: const Icon(Icons.upload_file_rounded),
                 tooltip: 'Import CSV',
