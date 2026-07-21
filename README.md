@@ -1,69 +1,68 @@
 # Attendly
 
-Attendly is a high-performance, offline-capable event check-in and management application built with Flutter and Firebase.
+**Attendly** is a robust, offline-first event check-in and ticket scanning application built with Flutter and Firebase. It was designed to guarantee atomic check-ins across multiple devices (to prevent double-scans) while allowing organizers to continue scanning even in environments with zero internet connectivity.
 
-## Features
+![Attendly Banner](assets/logo.png)
 
-- **Organizer Dashboard**: Create and manage multiple events.
-- **Attendee Management**: Manually add attendees or bulk import via CSV.
-- **QR Ticket Generation**: Attendees receive a scannable QR ticket unique to their registration.
-- **Offline-First Scanning** (In Progress): Volunteers can continuously scan tickets even when the internet drops. The app queues the check-ins locally and syncs them automatically when back online.
-- **Cloud Functions Transaction** (In Progress): Server-side resolution prevents duplicate check-ins, even under heavy concurrent load (300-500 scans/second).
-- **Live Dashboard** (In Progress): Real-time analytics and CSV export of attendance data.
+## 🚀 Key Features
 
-## Getting Started
+*   **Offline-First Scanning**: Continue scanning QR codes in airplane mode. The app securely queues check-ins in a local SQLite-backed BLoC state.
+*   **Atomic Transactions**: A robust TypeScript Firebase Cloud Functions backend ensures that multiple scanners cannot accidentally check in the same ticket simultaneously.
+*   **Real-time Analytics Dashboard**: View live, animated pie charts of check-in progress right from the event details screen.
+*   **CSV Export**: Instantly export a complete ledger of attendees and their exact check-in timestamps to a local spreadsheet.
+*   **Premium UI**: A sleek, custom "Matte Black & Crimson Red" theme built with smooth micro-interactions.
+
+## 🏗️ Architecture
+
+Attendly utilizes the **BLoC (Business Logic Component)** pattern for state management, providing a clear separation of concerns between the UI and the data layer.
+
+### The Check-In Flow (Offline-to-Cloud)
+
+1.  **Scanner**: The `ScannerBloc` processes camera frames rapidly (with a 300-500ms debounce) using `mobile_scanner`.
+2.  **Queue**: If the device is offline, the check-in is appended to a `pendingCheckIns` sub-collection via the `SyncBloc`.
+3.  **Cloud Function**: The `processCheckIn` TypeScript Cloud Function listens to `pendingCheckIns`. It uses an atomic `runTransaction` to verify the ticket hasn't been used yet. If valid, it marks the global `attendees` document as `checkedIn: true`.
+4.  **Real-time UI**: The Flutter UI listens to the `attendees` collection snapshot, automatically reflecting the updated check-in status on the pie charts and lists as soon as the Cloud Function finishes.
+
+## 🛠️ Getting Started
 
 ### Prerequisites
-- Flutter SDK (`>=3.12.0`)
-- Firebase CLI configured
-- A Firebase project with Firestore and Authentication enabled
+*   Flutter SDK (^3.12.2)
+*   Node.js (for Cloud Functions)
+*   A Firebase Project with Authentication and Cloud Firestore enabled.
 
-### Installation
+### Setup Instructions
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/heyitsshubh/Attendly.git
-   cd Attendly
-   ```
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/heyitsshubh/Attendly.git
+    cd appendly
+    ```
+2.  **Install dependencies:**
+    ```bash
+    flutter pub get
+    ```
+3.  **Deploy Cloud Functions:**
+    ```bash
+    cd functions
+    npm install
+    npm run build
+    firebase deploy --only functions
+    ```
+4.  **Run the app:**
+    ```bash
+    flutter run
+    ```
 
-2. Install dependencies:
-   ```bash
-   flutter pub get
-   ```
+## 🧪 System Load Testing
 
-3. Configure Firebase:
-   ```bash
-   flutterfire configure
-   ```
+To verify the atomic nature of the backend under heavy load, you can run the provided Node script:
 
-4. Run the app:
-   ```bash
-   flutter run
-   ```
+```bash
+cd scripts
+set GOOGLE_APPLICATION_CREDENTIALS=C:\path\to\your\serviceAccountKey.json
+node load_test.js
+```
+*This will concurrently dispatch 50 simultaneous check-ins to ensure your Firebase transaction architecture scales without race conditions.*
 
-## Architecture
-
-Attendly follows a feature-branch workflow and uses the **BLoC** pattern for state management. 
-
-- `lib/blocs/`: State management logic
-- `lib/models/`: Data models and Firestore serialization
-- `lib/screens/`: UI components and screens
-- `lib/services/`: Firestore and external API communication
-
-## Branch Strategy
-
-We follow a strict feature branch strategy. Each feature is developed on an isolated branch and merged into `main`:
-- `feature/setup-and-models` ✅
-- `feature/auth-and-routing` ✅
-- `feature/event-management` ✅
-- `feature/attendee-list-csv` ✅
-- `feature/qr-ticket-generation` ✅
-- `feature/offline-queue-sync` ⏳
-- `feature/scanner-ui` ⏳
-- `feature/cloud-functions-transaction` ⏳
-- `feature/live-dashboard-export` ⏳
-- `feature/load-testing` ⏳
-
-## License
-
-This project is licensed under the MIT License.
+---
+*Built with Flutter & Firebase.*
