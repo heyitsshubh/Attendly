@@ -35,7 +35,7 @@ class ExportService {
     }
 
     // 2. Convert to CSV string
-    String csvData = const ListToCsvConverter().convert(rows);
+    String csvData = ListToCsvConverter().convert(rows);
 
     // 3. Save file
     Directory? directory;
