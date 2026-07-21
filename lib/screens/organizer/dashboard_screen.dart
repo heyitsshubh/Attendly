@@ -209,7 +209,9 @@ class _EventCard extends StatelessWidget {
     final date = event.startTime;
     final monthStr = _monthAbbr(date.month);
 
-    return GestureDetector(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
@@ -315,6 +317,7 @@ class _EventCard extends StatelessWidget {
                   color: AppTheme.primaryRed),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -424,7 +427,9 @@ class _GradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
       onTap: onPressed,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 14),
@@ -446,6 +451,7 @@ class _GradientButton extends StatelessWidget {
             fontWeight: FontWeight.w600,
             color: Colors.white,
           ),
+        ),
         ),
       ),
     );

@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:csv/csv.dart';
+
 import 'package:path_provider/path_provider.dart';
 import '../models/attendee.dart';
 
@@ -35,7 +35,10 @@ class ExportService {
     }
 
     // 2. Convert to CSV string
-    String csvData = ListToCsvConverter().convert(rows);
+    String csvData = rows.map((row) => row.map((item) {
+      String str = item?.toString() ?? '';
+      return '"${str.replaceAll('"', '""')}"';
+    }).join(',')).join('\n');
 
     // 3. Save file
     Directory? directory;

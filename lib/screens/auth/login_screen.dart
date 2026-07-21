@@ -292,7 +292,9 @@ class _GradientButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
       onTap: onPressed,
       child: Container(
         height: 52,
@@ -316,6 +318,7 @@ class _GradientButton extends StatelessWidget {
               color: Colors.white,
             ),
           ),
+        ),
         ),
       ),
     );

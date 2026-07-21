@@ -13,7 +13,7 @@ import 'package:appendly/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const AppendlyApp());
+    await tester.pumpWidget(const AttendlyApp(isFirebaseInitialized: true, initErrorMessage: ''));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
