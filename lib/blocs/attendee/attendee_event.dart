@@ -45,3 +45,13 @@ class BulkImportAttendeesRequested extends AttendeeEvent {
   @override
   List<Object> get props => [eventId, attendees];
 }
+
+class AttendeesLoadFailed extends AttendeeEvent {
+  final String error;
+
+  const AttendeesLoadFailed(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+

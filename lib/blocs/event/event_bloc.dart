@@ -13,6 +13,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
         super(EventInitial()) {
     on<LoadEventsRequested>(_onLoadEventsRequested);
     on<EventsUpdated>(_onEventsUpdated);
+    on<EventsLoadFailed>(_onEventsLoadFailed);
     on<CreateEventRequested>(_onCreateEventRequested);
   }
 
@@ -27,13 +28,17 @@ class EventBloc extends Bloc<EventEvent, EventState> {
         add(EventsUpdated(events));
       },
       onError: (error) {
-        emit(EventError(error.toString()));
+        add(EventsLoadFailed(error.toString()));
       },
     );
   }
 
   void _onEventsUpdated(EventsUpdated event, Emitter<EventState> emit) {
     emit(EventsLoaded(event.events));
+  }
+
+  void _onEventsLoadFailed(EventsLoadFailed event, Emitter<EventState> emit) {
+    emit(EventError(event.error));
   }
 
   Future<void> _onCreateEventRequested(

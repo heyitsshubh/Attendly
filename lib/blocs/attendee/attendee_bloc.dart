@@ -13,6 +13,7 @@ class AttendeeBloc extends Bloc<AttendeeEvent, AttendeeState> {
         super(AttendeeInitial()) {
     on<LoadAttendeesRequested>(_onLoadAttendeesRequested);
     on<AttendeesUpdated>(_onAttendeesUpdated);
+    on<AttendeesLoadFailed>(_onAttendeesLoadFailed);
     on<AddAttendeeRequested>(_onAddAttendeeRequested);
     on<BulkImportAttendeesRequested>(_onBulkImportAttendeesRequested);
   }
@@ -28,13 +29,17 @@ class AttendeeBloc extends Bloc<AttendeeEvent, AttendeeState> {
         add(AttendeesUpdated(attendees));
       },
       onError: (error) {
-        emit(AttendeeError(error.toString()));
+        add(AttendeesLoadFailed(error.toString()));
       },
     );
   }
 
   void _onAttendeesUpdated(AttendeesUpdated event, Emitter<AttendeeState> emit) {
     emit(AttendeesLoaded(event.attendees));
+  }
+
+  void _onAttendeesLoadFailed(AttendeesLoadFailed event, Emitter<AttendeeState> emit) {
+    emit(AttendeeError(event.error));
   }
 
   Future<void> _onAddAttendeeRequested(

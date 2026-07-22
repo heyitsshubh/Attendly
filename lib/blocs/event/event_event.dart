@@ -34,3 +34,13 @@ class CreateEventRequested extends EventEvent {
   @override
   List<Object> get props => [event];
 }
+
+class EventsLoadFailed extends EventEvent {
+  final String error;
+
+  const EventsLoadFailed(this.error);
+
+  @override
+  List<Object> get props => [error];
+}
+
