@@ -6,6 +6,7 @@ import '../../blocs/auth/auth_event.dart';
 import '../../blocs/auth/auth_state.dart';
 import '../../theme/app_theme.dart';
 import 'login_screen.dart';
+import '../../utils/snackbar_utils.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -37,11 +38,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            SnackbarUtils.showError(context, state.message);
           }
           if (state is Authenticated) {
+            SnackbarUtils.showSuccess(context, 'Account created successfully!');
             Navigator.of(context).pop();
           }
         },

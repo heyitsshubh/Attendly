@@ -15,6 +15,7 @@ import '../../theme/app_theme.dart';
 import '../attendee/ticket_screen.dart';
 import 'scanner_screen.dart';
 import 'analytics_screen.dart';
+import '../../utils/snackbar_utils.dart';
 
 class EventDetailsScreen extends StatefulWidget {
   final EventModel event;
@@ -73,13 +74,15 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           context.read<AttendeeBloc>().add(
                 BulkImportAttendeesRequested(widget.event.id, newAttendees),
               );
+          SnackbarUtils.showSuccess(
+            context,
+            'Importing ${newAttendees.length} attendees…',
+          );
         }
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error importing CSV: $e')),
-        );
+        SnackbarUtils.showError(context, 'Error importing CSV: $e');
       }
     }
   }
@@ -280,14 +283,10 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
           BlocConsumer<AttendeeBloc, AttendeeState>(
             listener: (context, state) {
               if (state is AttendeeOperationSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
-                );
-              } else if (state is AttendeeError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
-                );
-              }
+              SnackbarUtils.showSuccess(context, state.message);
+            } else if (state is AttendeeError) {
+              SnackbarUtils.showError(context, state.message);
+            }
             },
             builder: (context, state) {
               if (state is AttendeeLoading) {

@@ -10,6 +10,7 @@ import '../../blocs/sync/sync_event.dart';
 import '../../blocs/sync/sync_state.dart';
 import '../../models/event.dart';
 import '../../theme/app_theme.dart';
+import '../../utils/snackbar_utils.dart';
 
 class ScannerScreen extends StatefulWidget {
   final EventModel event;
@@ -54,7 +55,16 @@ class _ScannerScreenState extends State<ScannerScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: BlocBuilder<ScannerBloc, ScannerState>(
+      body: BlocConsumer<ScannerBloc, ScannerState>(
+        listener: (context, state) {
+          if (state is CheckInQueued) {
+            SnackbarUtils.showSuccess(context, '✅ Ticket queued for check-in!');
+          } else if (state is CheckInDuplicate) {
+            SnackbarUtils.showError(context, '⚠️ Already checked in!');
+          } else if (state is CheckInInvalid) {
+            SnackbarUtils.showError(context, '❌ Invalid ticket QR code');
+          }
+        },
         builder: (context, scannerState) {
           final Color frameColor = _frameColor(scannerState);
 

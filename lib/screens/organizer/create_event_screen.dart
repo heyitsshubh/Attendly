@@ -5,6 +5,7 @@ import '../../blocs/event/event_bloc.dart';
 import '../../blocs/event/event_event.dart';
 import '../../blocs/event/event_state.dart';
 import '../../models/event.dart';
+import '../../utils/snackbar_utils.dart';
 
 class CreateEventScreen extends StatefulWidget {
   const CreateEventScreen({super.key});
@@ -101,14 +102,10 @@ class _CreateEventScreenState extends State<CreateEventScreen> {
       body: BlocConsumer<EventBloc, EventState>(
         listener: (context, state) {
           if (state is EventOperationSuccess) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            SnackbarUtils.showSuccess(context, state.message);
             Navigator.pop(context); // Go back to dashboard
           } else if (state is EventError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            SnackbarUtils.showError(context, state.message);
           }
         },
         builder: (context, state) {

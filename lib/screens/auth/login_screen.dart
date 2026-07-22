@@ -7,6 +7,7 @@ import '../../blocs/auth/auth_state.dart';
 import '../../theme/app_theme.dart';
 import '../attendee/ticket_search_screen.dart';
 import 'register_screen.dart';
+import '../../utils/snackbar_utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -35,9 +36,9 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            SnackbarUtils.showError(context, state.message);
+          } else if (state is Authenticated) {
+            SnackbarUtils.showSuccess(context, 'Login successful!');
           }
         },
         child: Stack(
