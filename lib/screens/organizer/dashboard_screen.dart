@@ -42,70 +42,49 @@ class _DashboardScreenState extends State<DashboardScreen> {
         slivers: [
           // ── Premium SliverAppBar ────────────────────────────────────────────
           SliverAppBar(
-            expandedHeight: 160,
+            expandedHeight: 110,
             pinned: true,
-            backgroundColor: isDark ? AppTheme.darkSurface : AppTheme.lightSurface,
+            backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
             surfaceTintColor: Colors.transparent,
             flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.pin,
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: AppTheme.primaryGradient,
                 ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Attendly',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.w800,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                                Text(
-                                  'Your event dashboard',
-                                  style: GoogleFonts.outfit(
-                                    fontSize: 13,
-                                    color: Colors.white.withOpacity(0.75),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                context.read<AuthBloc>().add(AuthLogoutRequested());
-                              },
-                              icon: const Icon(Icons.logout_rounded,
-                                  color: Colors.white),
-                              tooltip: 'Sign out',
-                            ),
-                          ],
-                        ),
-                      ],
+              ),
+              title: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Attendly',
+                    style: GoogleFonts.outfit(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
                     ),
                   ),
-                ),
-              ),
-              title: Text(
-                'Dashboard',
-                style: GoogleFonts.outfit(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w700,
-                  color: isDark ? AppTheme.darkText : AppTheme.lightText,
-                ),
+                  Text(
+                    'Dashboard',
+                    style: GoogleFonts.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ],
               ),
               titlePadding: const EdgeInsets.only(left: 20, bottom: 12),
             ),
+            actions: [
+              IconButton(
+                onPressed: () {
+                  context.read<AuthBloc>().add(AuthLogoutRequested());
+                },
+                icon: const Icon(Icons.logout_rounded, color: Colors.white),
+                tooltip: 'Sign out',
+              ),
+            ],
           ),
 
           // ── Body content ───────────────────────────────────────────────────

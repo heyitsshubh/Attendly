@@ -198,67 +198,58 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            expandedHeight: 140,
+            expandedHeight: 110,
             pinned: true,
+            backgroundColor: isDark ? AppTheme.darkBg : AppTheme.lightBg,
             surfaceTintColor: Colors.transparent,
+            iconTheme: const IconThemeData(color: Colors.white),
             flexibleSpace: FlexibleSpaceBar(
-              collapseMode: CollapseMode.pin,
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: AppTheme.primaryGradient,
                 ),
-                child: SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(56, 16, 16, 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.event.name,
+              ),
+              title: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.event.name,
+                    style: GoogleFonts.outfit(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.location_on_outlined,
+                          size: 10, color: Colors.white70),
+                      const SizedBox(width: 2),
+                      Flexible(
+                        child: Text(
+                          widget.event.location,
                           style: GoogleFonts.outfit(
-                            fontSize: 22,
-                            fontWeight: FontWeight.w800,
-                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white70,
                           ),
-                          maxLines: 2,
+                          maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Icon(Icons.location_on_outlined,
-                                size: 13, color: Colors.white70),
-                            const SizedBox(width: 4),
-                            Text(
-                              widget.event.location,
-                              style: GoogleFonts.outfit(
-                                fontSize: 13,
-                                color: Colors.white.withOpacity(0.8),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
+                ],
               ),
-              title: Text(
-                widget.event.name,
-                style: GoogleFonts.outfit(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
-                  color: isDark ? AppTheme.darkText : AppTheme.lightText,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              titlePadding: const EdgeInsets.only(left: 56, bottom: 12),
+              titlePadding: const EdgeInsets.only(left: 56, bottom: 12, right: 96),
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.bar_chart_rounded),
+                icon: const Icon(Icons.bar_chart_rounded, color: Colors.white),
                 tooltip: 'Analytics & Export',
                 onPressed: () {
                   Navigator.push(
@@ -273,7 +264,7 @@ class _EventDetailsScreenState extends State<EventDetailsScreen> {
                 },
               ),
               IconButton(
-                icon: const Icon(Icons.upload_file_rounded),
+                icon: const Icon(Icons.upload_file_rounded, color: Colors.white),
                 tooltip: 'Import CSV',
                 onPressed: _importCSV,
               ),
