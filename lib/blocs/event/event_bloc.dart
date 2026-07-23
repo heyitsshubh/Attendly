@@ -7,6 +7,7 @@ import 'event_state.dart';
 class EventBloc extends Bloc<EventEvent, EventState> {
   final EventService _eventService;
   StreamSubscription? _eventsSubscription;
+  String? _currentOrganizerId; // remember who we're watching
 
   EventBloc({required EventService eventService})
       : _eventService = eventService,
@@ -19,6 +20,7 @@ class EventBloc extends Bloc<EventEvent, EventState> {
 
   void _onLoadEventsRequested(
       LoadEventsRequested event, Emitter<EventState> emit) {
+    _currentOrganizerId = event.organizerId;
     emit(EventLoading());
     _eventsSubscription?.cancel();
     _eventsSubscription = _eventService
@@ -43,12 +45,25 @@ class EventBloc extends Bloc<EventEvent, EventState> {
 
   Future<void> _onCreateEventRequested(
       CreateEventRequested event, Emitter<EventState> emit) async {
-    emit(EventLoading());
+    // Don't emit EventLoading here — it would tear down the stream subscription
+    // and leave the dashboard stuck. Just save and let the stream auto-update.
     try {
       await _eventService.createEvent(event.event);
       emit(const EventOperationSuccess('Event created successfully!'));
-      // We don't need to manually fetch events again because the stream
-      // will automatically push the new snapshot and trigger EventsUpdated.
+      // Re-subscribe to the stream so the dashboard gets the new event
+      if (_currentOrganizerId != null) {
+        _eventsSubscription?.cancel();
+        _eventsSubscription = _eventService
+            .getEventsForOrganizer(_currentOrganizerId!)
+            .listen(
+          (events) {
+            add(EventsUpdated(events));
+          },
+          onError: (error) {
+            add(EventsLoadFailed(error.toString()));
+          },
+        );
+      }
     } catch (e) {
       emit(EventError(e.toString()));
     }

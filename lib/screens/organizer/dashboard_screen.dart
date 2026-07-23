@@ -25,7 +25,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
     final authState = context.read<AuthBloc>().state;
     if (authState is Authenticated) {
-      context.read<EventBloc>().add(LoadEventsRequested(authState.user.uid));
+      // Only dispatch if not already streaming (avoid re-subscribing on every rebuild)
+      final eventState = context.read<EventBloc>().state;
+      if (eventState is EventInitial || eventState is EventOperationSuccess) {
+        context.read<EventBloc>().add(LoadEventsRequested(authState.user.uid));
+      }
     }
   }
 
@@ -106,7 +110,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
           // ── Body content ───────────────────────────────────────────────────
           SliverToBoxAdapter(
-            child: BlocBuilder<EventBloc, EventState>(
+            child: BlocConsumer<EventBloc, EventState>(
+              listener: (context, state) {
+                // After creating an event, re-subscribe to the list
+                if (state is EventOperationSuccess) {
+                  final authState = context.read<AuthBloc>().state;
+                  if (authState is Authenticated) {
+                    context.read<EventBloc>().add(
+                          LoadEventsRequested(authState.user.uid),
+                        );
+                  }
+                }
+              },
               builder: (context, state) {
                 if (state is EventLoading) {
                   return const SizedBox(
